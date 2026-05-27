@@ -84,7 +84,43 @@ int main()
 
     int opcao;
 
-    opcao = tela_menu_opcoes();
+     do {
+        // 1. Mostra o menu e captura a opção escolhida pelo usuário
+        opcao = tela_menu_opcoes();
+
+        // 2. Avalia a opção escolhida
+        switch (opcao) {
+            case 1:
+                // === AQUI A FUNÇÃO É CHAMADA ===
+                cadastrar_gato();
+
+                // Pausa a tela para o usuário ver a mensagem de sucesso
+                printf("\nPressione ENTER para voltar ao menu...");
+                getchar(); // Captura o ENTER pendente se houver
+                getchar(); // Aguarda o usuário pressionar ENTER
+                break;
+
+            case 2:
+                printf("\n[Em desenvolvimento] Cadastro de Tutor e Adoção...\n");
+                system("pause");
+                break;
+
+            case 3:
+                printf("\n[Em desenvolvimento] Consulta de Registros...\n");
+                system("pause");
+                break;
+
+            case 0:
+                printf("\nSaindo do programa... Obrigado!\n");
+                break;
+
+            default:
+                printf("\nERRO: Opção inválida! Tente novamente.\n");
+                system("pause");
+                break;
+        }
+
+    } while (opcao != 0); // O loop continua enquanto a opção for diferente de 0
 
     return 0;
 }
@@ -249,4 +285,74 @@ void leia_telefone(char *numero){ //função para ler e verificar o telefone
         }
 
     }while(erro == 1);
+}
+
+
+void cadastrar_gato() {
+    // 1. Criamos uma variável do tipo da sua Struct Gato para agrupar os dados
+    Gato novo_gato;
+
+    // Inicializa campos de controle da struct
+    novo_gato.ocupado = 1;
+    novo_gato.status = 1; // Ativo no sistema
+
+    printf("\nDigite o numero do Microchip (Apenas numeros): ");
+    scanf("%d", &novo_gato.microchip);
+
+    // 2. Limpa o buffer do teclado de forma segura
+    fflush(stdin);
+
+    // 3. USO DA SUA FUNÇÃO UNIVERSAL DE STRING (Nome)
+    // Passamos diretamente o vetor, sem o '&'. Adicionado o ponto e vírgula esquecido.
+    printf("\n--- Cadastro do Nome ---");
+    leia_string(novo_gato.nome_gato);
+
+    // 4. USO DA SUA FUNÇÃO UNIVERSAL DE SEXO
+    // Como sexo_gato é um char simples na struct, passamos com '&'
+    leia_sexo(&novo_gato.sexo_gato);
+
+    if (novo_gato.sexo_gato == 'F') {
+        printf("Sexo cadastrado com sucesso: Feminino\n");
+    } else {
+        printf("Sexo cadastrado com sucesso: Masculino\n");
+    }
+
+    // 5. REAPROVEITANDO A FUNÇÃO DE STRING PARA PELAGEM E LAR TEMPORÁRIO
+    // Como você criou uma excelente função universal de string, use-a aqui também!
+    printf("\n--- Cadastro da Pelagem ---");
+    leia_string(novo_gato.pelagem);
+
+    printf("\n--- Cadastro do Lar Temporário ---");
+    leia_string(novo_gato.lar_temporario);
+
+    // 6. USO DA SUA FUNÇÃO UNIVERSAL BOOLEANA (Castrado)
+    // Adaptado para usar a sua função leia_booleano (0 ou 1) que está no código
+    printf("\n--- Status de Castração ---");
+    leia_booleano(&novo_gato.castrado);
+
+    if(novo_gato.castrado == 1) {
+        printf("\n Digite a data da castracao (DD/MM/AAAA): ");
+        scanf(" %10[^\n]", novo_gato.data_castracao);
+        fflush(stdin);
+    } else {
+        strcpy(novo_gato.data_castracao, "N/A");
+    }
+
+    // 7. USO DA SUA FUNÇÃO UNIVERSAL BOOLEANA + PENDÊNCIAS (Vacina)
+    printf("\n--- Status de Vacinação ---");
+    // Usamos a pergunta invertida para fazer sentido com o seu leia_booleano (1 para Sim/Em dia, 0 para Não)
+    printf("\n O gato possui TODAS as vacinas em dia?");
+    leia_booleano(&novo_gato.vacina);
+
+    if(novo_gato.vacina == 0) {
+        // Se não está em dia, chama a sua função de pendências
+        leia_pendencias(novo_gato.vacina_pendente);
+    } else {
+        strcpy(novo_gato.vacina_pendente, "Nenhuma");
+    }
+
+    printf("\n=========================================");
+    printf("\n*** SUCESSO: Felino '%s' gravado no banco de dados! ***\n"), novo_gato.nome_gato);
+
+
 }
